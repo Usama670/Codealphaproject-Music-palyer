@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Music Player</title>
+    <!-- Link to Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Link to custom CSS file -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gradient-to-br from-purple-500 to-indigo-600 min-h-screen flex items-center justify-center p-4 font-sans antialiased">
+
+    <!-- Music Player Container -->
+    <div class="w-full max-w-md bg-white rounded-xl shadow-2xl overflow-hidden p-6 relative">
+        <!-- Background blob/shape for visual interest -->
+        <div class="absolute inset-0 bg-gradient-to-tr from-purple-300 via-pink-200 to-yellow-100 opacity-50 blur-3xl scale-125 rounded-full transform -translate-x-1/4 -translate-y-1/4"></div>
+        <div class="absolute inset-0 bg-gradient-to-bl from-blue-300 via-green-200 to-teal-100 opacity-50 blur-3xl scale-125 rounded-full transform translate-x-1/4 translate-y-1/4"></div>
+
+        <div class="relative z-10 flex flex-col items-center">
+            <!-- Album Art -->
+            <div class="w-48 h-48 md:w-64 md:h-64 bg-gray-200 rounded-full overflow-hidden shadow-lg mb-6 transform transition-transform duration-300 ease-in-out hover:scale-105">
+                <img id="album-art" src="https://placehold.co/256x256/E0E0E0/333333?text=Music" alt="Album Art" class="w-full h-full object-cover">
+            </div>
+
+            <!-- Song Info -->
+            <h2 id="song-title" class="text-2xl md:text-3xl font-bold text-gray-800 text-center mb-1">Song Title</h2>
+            <p id="song-artist" class="text-md md:text-lg text-gray-600 text-center mb-4">Artist Name</p>
+
+            <!-- Progress Bar -->
+            <div class="w-full bg-gray-200 rounded-full h-2.5 mb-4 relative cursor-pointer group" id="progress-container">
+                <div id="progress-bar" class="bg-indigo-500 h-2.5 rounded-full transition-all duration-100 ease-linear"></div>
+                <div id="progress-scrubber" class="w-4 h-4 bg-indigo-700 rounded-full absolute -top-1.5 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200" style="left: 0%;"></div>
+            </div>
+            <div class="w-full flex justify-between text-sm text-gray-500 mb-6">
+                <span id="current-time">0:00</span>
+                <span id="total-duration">0:00</span>
+            </div>
+
+            <!-- Controls -->
+            <div class="flex items-center justify-center space-x-6 mb-6">
+                <button id="prev-btn" class="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-3 rounded-full shadow-lg hover:shadow-xl transform hover:scale-110 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7"></path></svg>
+                </button>
+                <button id="play-pause-btn" class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white p-4 rounded-full shadow-lg hover:shadow-xl transform hover:scale-110 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-400">
+                    <svg id="play-icon" class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.118l-3.321-2.981A.995.995 0 0010 8v8a.995.995 0 001.431.863l3.321-2.981a.997.997 0 000-1.724z"></path></svg>
+                    <svg id="pause-icon" class="w-8 h-8 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </button>
+                <button id="next-btn" class="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-3 rounded-full shadow-lg hover:shadow-xl transform hover:scale-110 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7"></path></svg>
+                </button>
+            </div>
+
+            <!-- Volume Control -->
+            <div class="w-full flex items-center justify-center space-x-3 mb-6">
+                <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464A9.006 9.006 0 0118 12a9.006 9.006 0 01-2.464 3.536M9.536 5.464A4.996 4.996 0 0112 7a4.996 4.996 0 012.464 1.536M12 21v-7a4 4 0 00-4-4H5a1 1 0 01-1-1V6a1 1 0 011-1h3a4 4 0 004-4V3"></path></svg>
+                <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="1" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer range-lg transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-400">
+                <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a1 1 0 01-1-1V3a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1h-2z"></path></svg>
+            </div>
+
+            <!-- Playlist (Bonus Feature) -->
+            <div class="w-full max-h-48 overflow-y-auto bg-gray-100 rounded-lg p-4 shadow-inner">
+                <h3 class="text-lg font-semibold text-gray-700 mb-3">Playlist</h3>
+                <ul id="playlist" class="space-y-2">
+                    <!-- Playlist items will be injected here by JavaScript -->
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Link to JavaScript file -->
+    <script src="script.js"></script>
+</body>
+</html>
